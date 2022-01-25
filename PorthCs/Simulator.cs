@@ -4,7 +4,7 @@ namespace PorthCs;
 
 internal static class Simulator
 {
-    public static void Simulate(List<Op> program)
+    public static void Simulate(IEnumerable<Op> program)
     {
         Debug.Assert((int)OpCode.Count == 4, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();

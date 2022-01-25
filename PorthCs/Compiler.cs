@@ -5,7 +5,7 @@ namespace PorthCs;
 
 internal static class Compiler
 {
-    public static void Compile(List<Op> program, string outFilePath)
+    public static void Compile(IEnumerable<Op> program, string outFilePath)
     {
         using var file = File.OpenWrite(outFilePath);
         using var writer = new StreamWriter(file, Encoding.UTF8);

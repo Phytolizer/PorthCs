@@ -8,8 +8,8 @@ internal static class Program
     {
         Console.WriteLine("Usage: porth <SUBCOMMAND> [ARGS]");
         Console.WriteLine("  SUBCOMMANDS:");
-        Console.WriteLine("    sim     Simulate the program");
-        Console.WriteLine("    com     Compile the program");
+        Console.WriteLine("    sim <file>     Simulate the program");
+        Console.WriteLine("    com <file>     Compile the program");
     }
 
     private static void CallCommand(string[] args)
@@ -27,38 +27,54 @@ internal static class Program
         Process.Start(startInfo);
     }
 
+    private static IEnumerable<Op> LoadProgramFromFile(string filePath)
+    {
+        return File.OpenText(filePath).ReadToEnd().Split(' ', '\r', '\n', '\t').Where(word => word.Length > 0).Select(Parser.ParseWordAsOp);
+    }
+
     public static void Main(string[] args)
     {
-        if (args.Length == 0)
+        var argsIter = args.GetEnumerator();
+        if (!argsIter.MoveNext())
         {
             Usage();
             Console.WriteLine("[ERROR] no subcommand is provided");
             Environment.Exit(1);
         }
 
-        var subcommand = args[0];
-
-        var program = new List<Op>
-        {
-            Ops.Push(34),
-            Ops.Push(35),
-            Ops.Plus(),
-            Ops.Dump(),
-            Ops.Push(500),
-            Ops.Push(80),
-            Ops.Minus(),
-            Ops.Dump()
-        };
+        var subcommand = argsIter.Current;
 
         switch (subcommand)
         {
             case "sim":
+            {
+                if (!argsIter.MoveNext())
+                {
+                    Usage();
+                    Console.WriteLine("[ERROR] no input file is provided for the simulation");
+                    Environment.Exit(1);
+                }
+
+                var programPath = (string)(argsIter.Current ?? throw new InvalidOperationException());
+                var program = LoadProgramFromFile(programPath);
                 Simulator.Simulate(program);
-                break;
+            }
+            break;
             case "com":
+            {
+                if (!argsIter.MoveNext())
+                {
+                    Usage();
+                    Console.WriteLine("[ERROR] no input file is provided for the compilation");
+                    Environment.Exit(1);
+                }
+
+                var programPath = (string)(argsIter.Current ?? throw new InvalidOperationException());
+                var program = LoadProgramFromFile(programPath);
                 Compiler.Compile(program, "output.rs");
                 CallCommand(new[] { "rustc", "-C", "opt-level=2", "output.rs" });
                 break;
+            }
             default:
                 Usage();
                 Console.WriteLine($"[ERROR] unknown subcommand {subcommand}");
