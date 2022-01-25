@@ -15,7 +15,7 @@ internal static class Program
 
     private static void CallCommand(string[] args)
     {
-        Console.WriteLine(string.Join(' ', args));
+        Console.WriteLine($"[CMD] {string.Join(' ', args)}");
         var startInfo = new ProcessStartInfo
         {
             FileName = args[0],
@@ -30,7 +30,7 @@ internal static class Program
 
     private static IEnumerable<Op> LoadProgramFromFile(string filePath)
     {
-        return File.OpenText(filePath).ReadToEnd().Split(' ', '\r', '\n', '\t').Where(word => word.Length > 0).Select(Parser.ParseWordAsOp);
+        return File.OpenText(filePath).ReadToEnd().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Select(Parser.ParseWordAsOp);
     }
 
     public static void Main(string[] args)
@@ -75,6 +75,7 @@ internal static class Program
                 var outputPath = Path.ChangeExtension(programPath, ".rs") ?? throw new InvalidOperationException();
                 var outDir = Path.GetDirectoryName(programPath) ?? throw new InvalidOperationException();
                 Compiler.Compile(program, outputPath);
+                CallCommand(new[] { "rustfmt", outputPath });
                 CallCommand(new[] { "rustc", "-C", "opt-level=2", outputPath, "--out-dir", outDir });
                 break;
             }
