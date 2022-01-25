@@ -57,7 +57,7 @@ internal static class Program
                 break;
             case "com":
                 Compiler.Compile(program, "output.rs");
-                CallCommand(new[] { "rustc", "output.rs" });
+                CallCommand(new[] { "rustc", "-C", "opt-level=2", "output.rs" });
                 break;
             default:
                 Usage();
