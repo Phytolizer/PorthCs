@@ -6,10 +6,11 @@ internal static class Program
 {
     private static void Usage()
     {
-        Console.WriteLine("Usage: porth <SUBCOMMAND> [ARGS]");
+        Console.WriteLine($"Usage: {Environment.ProcessPath ?? "porth"} <SUBCOMMAND> [ARGS]");
         Console.WriteLine("  SUBCOMMANDS:");
         Console.WriteLine("    sim <file>     Simulate the program");
         Console.WriteLine("    com <file>     Compile the program");
+        Console.WriteLine("    help           Print this message");
     }
 
     private static void CallCommand(string[] args)
@@ -71,10 +72,15 @@ internal static class Program
 
                 var programPath = (string)(argsIter.Current ?? throw new InvalidOperationException());
                 var program = LoadProgramFromFile(programPath);
-                Compiler.Compile(program, "output.rs");
-                CallCommand(new[] { "rustc", "-C", "opt-level=2", "output.rs" });
+                var outputPath = Path.ChangeExtension(programPath, ".rs") ?? throw new InvalidOperationException();
+                var outDir = Path.GetDirectoryName(programPath) ?? throw new InvalidOperationException();
+                Compiler.Compile(program, outputPath);
+                CallCommand(new[] { "rustc", "-C", "opt-level=2", outputPath, "--out-dir", outDir });
                 break;
             }
+            case "help":
+                Usage();
+                break;
             default:
                 Usage();
                 Console.WriteLine($"[ERROR] unknown subcommand {subcommand}");
