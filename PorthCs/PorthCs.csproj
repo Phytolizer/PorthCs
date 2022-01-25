@@ -5,12 +5,26 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <StartupObject>PorthCs.Program</StartupObject>
+    <IsPublishable>False</IsPublishable>
+    <SignAssembly>False</SignAssembly>
+    <PackageLicenseFile>C:\Users\kyle\Documents\Git\PorthCs\LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/Phytolizer/porth-cpp</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="output.exe" />
     <None Remove="output.pdb" />
     <None Remove="output.rs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
