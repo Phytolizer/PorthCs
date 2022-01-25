@@ -27,6 +27,11 @@ internal static class Ops
         return new Op(OpCode.Equal, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
 
+    public static Op Gt(Token t)
+    {
+        return new Op(OpCode.Gt, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
     public static Op If(Token t)
     {
         return new Op(OpCode.If, t.FilePath, t.LineNumber, t.ColumnNumber);

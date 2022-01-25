@@ -6,6 +6,7 @@ internal enum OpCode
     Plus,
     Minus,
     Equal,
+    Gt,
     Dump,
     If,
     End,

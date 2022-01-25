@@ -7,7 +7,7 @@ internal static class Compiler
 {
     public static void Compile(IEnumerable<Op> program, string outFilePath)
     {
-        using var file = File.OpenWrite(outFilePath);
+        using var file = File.Create(outFilePath);
         using var writer = new StreamWriter(file, Encoding.UTF8);
 
         writer.Write(
@@ -16,7 +16,7 @@ internal static class Compiler
                     let mut stack = Vec::<u64>::new();
             ");
 
-        Debug.Assert((int)OpCode.Count == 8, "OpCodes are not exhaustively handled in Compiler.Compile");
+        Debug.Assert((int)OpCode.Count == 10, "OpCodes are not exhaustively handled in Compiler.Compile");
         foreach (var op in program)
         {
             writer.WriteLine($"// -- {op.Code} --");
@@ -42,6 +42,11 @@ internal static class Compiler
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(if a == b { 1 } else { 0 });");
+                    break;
+                case OpCode.Gt:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(if a > b { 1 } else { 0 });");
                     break;
                 case OpCode.Dump:
                     writer.WriteLine(@"println!(""{}"", stack.pop().unwrap());");
