@@ -6,7 +6,7 @@ internal static class Simulator
 {
     public static void Simulate(IList<Op> program)
     {
-        Debug.Assert((int)OpCode.Count == 8, "OpCodes are not exhaustively handled in Simulator.Simulate.");
+        Debug.Assert((int)OpCode.Count == 9, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
         for (var ip = 0; ip < program.Count;)
         {
@@ -67,11 +67,20 @@ internal static class Simulator
                     break;
                 }
                 case OpCode.End:
+                    ++ip;
                     break;
                 case OpCode.Else:
                 {
                     var elseOp = (IntegerOp)op;
                     ip = (int)elseOp.Operand;
+                    break;
+                }
+                case OpCode.Dup:
+                {
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a);
+                    stack.Push(a);
+                    ++ip;
                     break;
                 }
                 case OpCode.Count:

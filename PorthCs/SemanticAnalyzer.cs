@@ -7,7 +7,7 @@ internal static class SemanticAnalyzer
     public static IEnumerable<Op> CrossReferenceBlocks(List<Op> program)
     {
         var stack = new Stack<int>();
-        Debug.Assert((int)OpCode.Count == 8, "OpCodes are not exhaustively handled in Parser.CrossReferenceBlocks.");
+        Debug.Assert((int)OpCode.Count == 9, "OpCodes are not exhaustively handled in Parser.CrossReferenceBlocks.");
         for (var ip = 0; ip < program.Count; ++ip)
         {
             var op = program[ip];

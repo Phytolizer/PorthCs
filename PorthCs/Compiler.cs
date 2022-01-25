@@ -56,6 +56,11 @@ internal static class Compiler
                 case OpCode.Else:
                     writer.WriteLine("} else {");
                     break;
+                case OpCode.Dup:
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(a);");
+                    writer.WriteLine("stack.push(a);");
+                    break;
                 case OpCode.Count:
                     Debug.Fail("This is unreachable.");
                     break;

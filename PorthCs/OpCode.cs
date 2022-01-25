@@ -10,5 +10,6 @@ internal enum OpCode
     If,
     End,
     Else,
+    Dup,
     Count,
 }
