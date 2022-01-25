@@ -40,7 +40,7 @@ internal static class Program
 
     private static IEnumerable<Op> LoadProgramFromFile(string filePath)
     {
-        return Lexer.LexFile(filePath).Select(Parser.ParseTokenAsOp);
+        return SemanticAnalyzer.CrossReferenceBlocks(Lexer.LexFile(filePath).Select(Parser.ParseTokenAsOp).ToList());
     }
 
     public static void Main(string[] args)
@@ -68,7 +68,7 @@ internal static class Program
 
                 var programPath = (string)(argsIter.Current ?? throw new InvalidOperationException());
                 var program = LoadProgramFromFile(programPath);
-                Simulator.Simulate(program);
+                Simulator.Simulate(program.ToList());
             }
             break;
             case "com":

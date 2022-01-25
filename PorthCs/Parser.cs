@@ -6,21 +6,25 @@ internal static class Parser
 {
     public static Op ParseTokenAsOp(Token tok)
     {
-        Debug.Assert((int)OpCode.Count == 5, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
+        Debug.Assert((int)OpCode.Count == 7, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
         switch (tok.Word)
         {
             case "+":
-                return Ops.Plus();
+                return Ops.Plus(tok);
             case "-":
-                return Ops.Minus();
+                return Ops.Minus(tok);
             case ".":
-                return Ops.Dump();
+                return Ops.Dump(tok);
             case "=":
-                return Ops.Equal();
+                return Ops.Equal(tok);
+            case "if":
+                return Ops.If(tok);
+            case "end":
+                return Ops.End(tok);
             default:
                 if (ulong.TryParse(tok.Word, out var value))
                 {
-                    return Ops.Push(value);
+                    return Ops.Push(tok, value);
                 }
                 else
                 {

@@ -7,5 +7,7 @@ internal enum OpCode
     Minus,
     Equal,
     Dump,
+    If,
+    End,
     Count,
 }

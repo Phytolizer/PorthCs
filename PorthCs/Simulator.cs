@@ -4,18 +4,20 @@ namespace PorthCs;
 
 internal static class Simulator
 {
-    public static void Simulate(IEnumerable<Op> program)
+    public static void Simulate(IList<Op> program)
     {
-        Debug.Assert((int)OpCode.Count == 5, "OpCodes are not exhaustively handled in Simulator.Simulate.");
+        Debug.Assert((int)OpCode.Count == 7, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
-        foreach (var op in program)
+        for (var i = 0; i < program.Count;)
         {
+            var op = program[i];
             switch (op.Code)
             {
                 case OpCode.Push:
                 {
                     var pushOp = (IntegerOp)op;
                     stack.Push(pushOp.Operand);
+                    ++i;
                     break;
                 }
                 case OpCode.Plus:
@@ -23,6 +25,7 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push(a + b);
+                    ++i;
                     break;
                 }
                 case OpCode.Minus:
@@ -30,6 +33,7 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push(a - b);
+                    ++i;
                     break;
                 }
                 case OpCode.Equal:
@@ -37,14 +41,33 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push(a == b ? 1 : 0);
+                    ++i;
                     break;
                 }
                 case OpCode.Dump:
                 {
                     var a = stack.Pop();
                     Console.WriteLine(a);
+                    ++i;
                     break;
                 }
+                case OpCode.If:
+                {
+                    var ifOp = (IntegerOp)op;
+                    var cond = (ulong)stack.Pop();
+                    if (cond == 0)
+                    {
+                        i = (int)ifOp.Operand;
+                    }
+                    else
+                    {
+                        ++i;
+                    }
+
+                    break;
+                }
+                case OpCode.End:
+                    break;
                 case OpCode.Count:
                     Debug.Fail("This is unreachable.");
                     break;
