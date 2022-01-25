@@ -6,18 +6,18 @@ internal static class Simulator
 {
     public static void Simulate(IList<Op> program)
     {
-        Debug.Assert((int)OpCode.Count == 7, "OpCodes are not exhaustively handled in Simulator.Simulate.");
+        Debug.Assert((int)OpCode.Count == 8, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
-        for (var i = 0; i < program.Count;)
+        for (var ip = 0; ip < program.Count;)
         {
-            var op = program[i];
+            var op = program[ip];
             switch (op.Code)
             {
                 case OpCode.Push:
                 {
                     var pushOp = (IntegerOp)op;
                     stack.Push(pushOp.Operand);
-                    ++i;
+                    ++ip;
                     break;
                 }
                 case OpCode.Plus:
@@ -25,7 +25,7 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push(a + b);
-                    ++i;
+                    ++ip;
                     break;
                 }
                 case OpCode.Minus:
@@ -33,7 +33,7 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push(a - b);
-                    ++i;
+                    ++ip;
                     break;
                 }
                 case OpCode.Equal:
@@ -41,14 +41,14 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push(a == b ? 1 : 0);
-                    ++i;
+                    ++ip;
                     break;
                 }
                 case OpCode.Dump:
                 {
                     var a = stack.Pop();
                     Console.WriteLine(a);
-                    ++i;
+                    ++ip;
                     break;
                 }
                 case OpCode.If:
@@ -57,17 +57,23 @@ internal static class Simulator
                     var cond = (ulong)stack.Pop();
                     if (cond == 0)
                     {
-                        i = (int)ifOp.Operand;
+                        ip = (int)ifOp.Operand;
                     }
                     else
                     {
-                        ++i;
+                        ++ip;
                     }
 
                     break;
                 }
                 case OpCode.End:
                     break;
+                case OpCode.Else:
+                {
+                    var elseOp = (IntegerOp)op;
+                    ip = (int)elseOp.Operand;
+                    break;
+                }
                 case OpCode.Count:
                     Debug.Fail("This is unreachable.");
                     break;

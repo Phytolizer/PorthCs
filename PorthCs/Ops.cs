@@ -36,4 +36,9 @@ internal static class Ops
     {
         return new Op(OpCode.End, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
+
+    public static Op Else(Token t)
+    {
+        return new Op(OpCode.Else, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
 }

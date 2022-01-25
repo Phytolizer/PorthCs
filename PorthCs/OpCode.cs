@@ -9,5 +9,6 @@ internal enum OpCode
     Dump,
     If,
     End,
+    Else,
     Count,
 }

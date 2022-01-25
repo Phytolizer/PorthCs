@@ -12,11 +12,11 @@ internal static class Compiler
 
         writer.Write(
             @"
-                    fn main() {
-                        let mut stack = Vec::<u64>::new();
-                ");
+                fn main() {
+                    let mut stack = Vec::<u64>::new();
+            ");
 
-        Debug.Assert((int)OpCode.Count == 7, "OpCodes are not exhaustively handled in Compiler.Compile");
+        Debug.Assert((int)OpCode.Count == 8, "OpCodes are not exhaustively handled in Compiler.Compile");
         foreach (var op in program)
         {
             writer.WriteLine($"// -- {op.Code} --");
@@ -52,6 +52,9 @@ internal static class Compiler
                     break;
                 case OpCode.End:
                     writer.WriteLine("}");
+                    break;
+                case OpCode.Else:
+                    writer.WriteLine("} else {");
                     break;
                 case OpCode.Count:
                     Debug.Fail("This is unreachable.");
