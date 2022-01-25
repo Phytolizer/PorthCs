@@ -25,12 +25,22 @@ internal static class Program
             UseShellExecute = true
         };
 
-        Process.Start(startInfo);
+        var process = Process.Start(startInfo);
+        if (process == null)
+        {
+            throw new SubcommandException(args);
+        }
+
+        process.WaitForExit();
+        if (process.ExitCode != 0)
+        {
+            Environment.Exit(process.ExitCode);
+        }
     }
 
     private static IEnumerable<Op> LoadProgramFromFile(string filePath)
     {
-        return File.OpenText(filePath).ReadToEnd().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Select(Parser.ParseWordAsOp);
+        return Lexer.LexFile(filePath).Select(Parser.ParseTokenAsOp);
     }
 
     public static void Main(string[] args)

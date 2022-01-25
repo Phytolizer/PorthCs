@@ -4,15 +4,26 @@ namespace PorthCs;
 
 internal static class Parser
 {
-    public static Op ParseWordAsOp(string word)
+    public static Op ParseTokenAsOp(Token tok)
     {
-        Debug.Assert((int)OpCode.Count == 4, "OpCodes are not exhaustively handled in Parser.ParseWordAsOp.");
-        return word switch
+        Debug.Assert((int)OpCode.Count == 4, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
+        switch (tok.Word)
         {
-            "+" => Ops.Plus(),
-            "-" => Ops.Minus(),
-            "." => Ops.Dump(),
-            _ => Ops.Push(ulong.Parse(word))
-        };
+            case "+":
+                return Ops.Plus();
+            case "-":
+                return Ops.Minus();
+            case ".":
+                return Ops.Dump();
+            default:
+                if (ulong.TryParse(tok.Word, out var value))
+                {
+                    return Ops.Push(value);
+                }
+                else
+                {
+                    throw new ParserError(tok, "Unknown token");
+                }
+        }
     }
 }
