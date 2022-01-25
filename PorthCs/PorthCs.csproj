@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="output.exe" />
+    <None Remove="output.pdb" />
+    <None Remove="output.rs" />
+  </ItemGroup>
+
 </Project>
