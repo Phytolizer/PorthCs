@@ -6,7 +6,7 @@ internal static class Simulator
 {
     public static void Simulate(IEnumerable<Op> program)
     {
-        Debug.Assert((int)OpCode.Count == 4, "OpCodes are not exhaustively handled in Simulator.Simulate.");
+        Debug.Assert((int)OpCode.Count == 5, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
         foreach (var op in program)
         {
@@ -30,6 +30,13 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push(a - b);
+                    break;
+                }
+                case OpCode.Equal:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a == b ? 1 : 0);
                     break;
                 }
                 case OpCode.Dump:

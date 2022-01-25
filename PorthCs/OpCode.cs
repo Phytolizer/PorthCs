@@ -5,6 +5,7 @@ internal enum OpCode
     Push,
     Plus,
     Minus,
+    Equal,
     Dump,
     Count,
 }

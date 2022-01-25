@@ -16,7 +16,7 @@ internal static class Compiler
                         let mut stack = Vec::<u64>::new();
                 ");
 
-        Debug.Assert((int)OpCode.Count == 4, "OpCodes are not exhaustively handled in Compiler.Compile");
+        Debug.Assert((int)OpCode.Count == 5, "OpCodes are not exhaustively handled in Compiler.Compile");
         foreach (var op in program)
         {
             switch (op.Code)
@@ -36,6 +36,11 @@ internal static class Compiler
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(a - b);");
+                    break;
+                case OpCode.Equal:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(if a == b { 1 } else { 0 });");
                     break;
                 case OpCode.Dump:
                     writer.WriteLine(@"println!(""{}"", stack.pop().unwrap());");

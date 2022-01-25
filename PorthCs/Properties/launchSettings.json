@@ -5,6 +5,12 @@
       "commandLineArgs": "com Examples/Test.porth",
       "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthCs",
       "hotReloadEnabled": false
+    },
+    "PorthCs sim": {
+      "commandName": "Project",
+      "commandLineArgs": "sim Examples/Test.porth",
+      "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthCs",
+      "hotReloadEnabled": false
     }
   }
 }

@@ -21,4 +21,9 @@ internal static class Ops
     {
         return new Op(OpCode.Dump);
     }
+
+    public static Op Equal()
+    {
+        return new Op(OpCode.Equal);
+    }
 }
