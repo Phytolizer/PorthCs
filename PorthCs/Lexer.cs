@@ -28,6 +28,9 @@ public static class Lexer
 
     public static IEnumerable<Token> LexFile(string filePath)
     {
-        return File.OpenText(filePath).ReadToEnd().Split('\n').SelectMany((line, row) => LexLine(filePath, row, line));
+        return File.OpenText(filePath)
+            .ReadToEnd()
+            .Split('\n')
+            .SelectMany((line, row) => LexLine(filePath, row, line.Split("//")[0]));
     }
 }
