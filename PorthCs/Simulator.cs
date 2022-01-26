@@ -40,7 +40,7 @@ internal static class Simulator
                 {
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
-                    stack.Push(a == b ? 1 : 0);
+                    stack.Push((ulong)(a == b ? 1 : 0));
                     ++ip;
                     break;
                 }

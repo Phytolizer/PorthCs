@@ -2,13 +2,13 @@
   "profiles": {
     "PorthCs": {
       "commandName": "Project",
-      "commandLineArgs": "com Tests/Loops.porth",
+      "commandLineArgs": "com Tests/Conditions.porth",
       "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthCs",
       "hotReloadEnabled": false
     },
     "PorthCs sim": {
       "commandName": "Project",
-      "commandLineArgs": "sim Tests/Loops.porth",
+      "commandLineArgs": "sim Tests/Conditions.porth",
       "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthCs",
       "hotReloadEnabled": false
     }

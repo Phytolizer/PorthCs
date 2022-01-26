@@ -54,7 +54,7 @@ internal static class Compiler
                     break;
                 case OpCode.If:
                     writer.WriteLine("let condition = stack.pop().unwrap();");
-                    writer.WriteLine("if cond == 1 {");
+                    writer.WriteLine("if condition == 1 {");
                     break;
                 case OpCode.End:
                     writer.WriteLine("}");
