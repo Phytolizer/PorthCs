@@ -11,6 +11,8 @@ internal enum OpCode
     If,
     End,
     Else,
+    While,
+    Do,
     Dup,
     Count,
 }

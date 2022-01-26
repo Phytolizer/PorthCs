@@ -47,6 +47,16 @@ internal static class Ops
         return new Op(OpCode.Else, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
 
+    public static Op While(Token t)
+    {
+        return new Op(OpCode.While, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
+    public static Op Do(Token t)
+    {
+        return new Op(OpCode.Do, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
     public static Op Dup(Token t)
     {
         return new Op(OpCode.Dup, t.FilePath, t.LineNumber, t.ColumnNumber);

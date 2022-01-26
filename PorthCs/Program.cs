@@ -85,7 +85,7 @@ internal static class Program
                 var outputPath = Path.ChangeExtension(programPath, ".rs") ?? throw new InvalidOperationException();
                 var outDir = Path.GetDirectoryName(programPath) ?? throw new InvalidOperationException();
                 Console.WriteLine($"[INFO] Generating {outputPath}...");
-                Compiler.Compile(program, outputPath);
+                Compiler.Compile(program.ToList(), outputPath);
                 CallCommand(new[] { "rustfmt", outputPath });
                 CallCommand(new[] { "rustc", "-C", "opt-level=2", outputPath, "--out-dir", outDir });
                 break;

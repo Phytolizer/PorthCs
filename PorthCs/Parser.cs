@@ -6,7 +6,7 @@ internal static class Parser
 {
     public static Op ParseTokenAsOp(Token tok)
     {
-        Debug.Assert((int)OpCode.Count == 10, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
+        Debug.Assert((int)OpCode.Count == 12, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
         switch (tok.Word)
         {
             case "+":
@@ -25,6 +25,10 @@ internal static class Parser
                 return Ops.End(tok);
             case "else":
                 return Ops.Else(tok);
+            case "while":
+                return Ops.While(tok);
+            case "do":
+                return Ops.Do(tok);
             case "dup":
                 return Ops.Dup(tok);
             default:
