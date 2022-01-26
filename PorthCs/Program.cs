@@ -33,7 +33,20 @@ internal static class Program
             throw new SubcommandException(args);
         }
 
-        process.WaitForExit();
+        while (!process.HasExited)
+        {
+            var stdoutLine = process.StandardOutput.ReadLine();
+            if (stdoutLine != null)
+            {
+                Console.WriteLine(stdoutLine);
+            }
+            var stderrLine = process.StandardError.ReadLine();
+            if (stderrLine != null)
+            {
+                Console.WriteLine(stderrLine);
+            }
+        }
+        // read remaining output
         Console.Write(process.StandardOutput.ReadToEnd());
         Console.Write(process.StandardError.ReadToEnd());
         if (process.ExitCode != 0)
