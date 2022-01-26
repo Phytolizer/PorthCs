@@ -2,7 +2,7 @@
   "profiles": {
     "PorthCs": {
       "commandName": "Project",
-      "commandLineArgs": "com Tests/Conditions.porth",
+      "commandLineArgs": "com -r Tests/Conditions.porth",
       "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthCs",
       "hotReloadEnabled": false
     },
