@@ -13,7 +13,7 @@ public static class Lexer
         }
     }
 
-    private static int FindCol(string line, int col, Func<char, bool> predicate)
+    private static int FindCol(string line, int col, Predicate<char> predicate)
     {
         for (var i = col; i < line.Length; ++i)
         {
