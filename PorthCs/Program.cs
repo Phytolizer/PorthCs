@@ -121,7 +121,7 @@ internal static class Program
                 CallCommand(new[] { "rustc", "-C", "opt-level=2", outputPath, "--out-dir", outDir });
                 if (run)
                 {
-                    CallCommand(new[] { Path.ChangeExtension(Path.GetFullPath(outputPath), ".exe") });
+                    CallCommand(new[] { Path.ChangeExtension(Path.GetFullPath(outputPath), OperatingSystem.IsWindows() ? ".exe" : null) });
                 }
                 break;
             }
