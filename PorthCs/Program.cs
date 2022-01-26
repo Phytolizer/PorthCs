@@ -13,7 +13,13 @@ internal static class Program
         Console.WriteLine("    help             Print this message");
     }
 
-    private static void CallCommand(string[] args)
+    private enum CommandFatality
+    {
+        NonFatal,
+        Fatal
+    }
+
+    private static (int exitCode, string stdout) CallCommand(string[] args, CommandFatality fatality = CommandFatality.NonFatal)
     {
         Console.WriteLine($"[CMD] {string.Join(' ', args)}");
         var startInfo = new ProcessStartInfo
@@ -33,26 +39,18 @@ internal static class Program
             throw new SubcommandException(args);
         }
 
-        while (!process.HasExited)
+        process.WaitForExit();
+        if (process.ExitCode == 0)
         {
-            var stdoutLine = process.StandardOutput.ReadLine();
-            if (stdoutLine != null)
-            {
-                Console.WriteLine(stdoutLine);
-            }
-            var stderrLine = process.StandardError.ReadLine();
-            if (stderrLine != null)
-            {
-                Console.WriteLine(stderrLine);
-            }
+            return (process.ExitCode, process.StandardOutput.ReadToEnd());
         }
-        // read remaining output
-        Console.Write(process.StandardOutput.ReadToEnd());
-        Console.Write(process.StandardError.ReadToEnd());
-        if (process.ExitCode != 0)
+
+        Console.Error.Write(process.StandardError.ReadToEnd());
+        if (fatality == CommandFatality.Fatal)
         {
-            Environment.Exit(process.ExitCode);
+            throw new SubcommandException(args);
         }
+        return (process.ExitCode, process.StandardOutput.ReadToEnd());
     }
 
     private static IEnumerable<Op> LoadProgramFromFile(string filePath)
@@ -117,11 +115,17 @@ internal static class Program
                 var outDir = Path.GetDirectoryName(programPath) ?? throw new InvalidOperationException();
                 Console.WriteLine($"[INFO] Generating {outputPath}...");
                 Compiler.Compile(program.ToList(), outputPath);
-                CallCommand(new[] { "rustfmt", outputPath });
-                CallCommand(new[] { "rustc", "-C", "opt-level=2", outputPath, "--out-dir", outDir });
+                var rustfmtArgs = new[] { "rustfmt", outputPath };
+                // rustfmt is silent on success
+                CallCommand(rustfmtArgs, CommandFatality.Fatal);
+
+                var rustcArgs = new[] { "rustc", "-C", "opt-level=2", outputPath, "--out-dir", outDir, "--print", "file-names" };
+                var (_, exeName) = CallCommand(rustcArgs, CommandFatality.Fatal);
+                var exePath = Path.GetFullPath(Path.Join(outDir, exeName.TrimEnd()));
                 if (run)
                 {
-                    CallCommand(new[] { Path.ChangeExtension(Path.GetFullPath(outputPath), OperatingSystem.IsWindows() ? ".exe" : null) });
+                    var (_, stdout) = CallCommand(new[] { Path.GetFullPath(exePath) }, CommandFatality.Fatal);
+                    Console.Write(stdout);
                 }
                 break;
             }
