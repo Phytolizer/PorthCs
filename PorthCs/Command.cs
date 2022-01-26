@@ -4,14 +4,7 @@ namespace PorthCs;
 
 public static class Command
 {
-    public enum Fatality
-    {
-        NonFatal,
-        Fatal
-    }
-
-    public static (int exitCode, string stdout) Call(string[] args,
-        Fatality fatality = Fatality.NonFatal)
+    public static string Call(string[] args)
     {
         Console.WriteLine($"[CMD] {string.Join(' ', args)}");
         var startInfo = new ProcessStartInfo
@@ -34,15 +27,10 @@ public static class Command
         process.WaitForExit();
         if (process.ExitCode == 0)
         {
-            return (process.ExitCode, process.StandardOutput.ReadToEnd());
+            return process.StandardOutput.ReadToEnd();
         }
 
         Console.Error.Write(process.StandardError.ReadToEnd());
-        if (fatality == Fatality.Fatal)
-        {
-            throw new SubcommandException(args);
-        }
-
-        return (process.ExitCode, process.StandardOutput.ReadToEnd());
+        throw new SubcommandException(args);
     }
 }

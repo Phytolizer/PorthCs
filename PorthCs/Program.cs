@@ -73,14 +73,14 @@ internal static class Program
                 var outDir = Path.GetDirectoryName(programPath) ?? throw new InvalidOperationException();
                 Console.WriteLine($"[INFO] Generating {outputPath}...");
                 Compiler.Compile(program.ToList(), outputPath);
-                Command.Call(new[] { "rustfmt", outputPath }, Command.Fatality.Fatal);
+                Command.Call(new[] { "rustfmt", outputPath });
 
-                var (_, exeName) = Command.Call(new[] { "rustc", outputPath, "--print", "file-names" }, Command.Fatality.Fatal);
+                var exeName = Command.Call(new[] { "rustc", outputPath, "--print", "file-names" });
                 var exePath = Path.GetFullPath(Path.Join(outDir, exeName.TrimEnd()));
                 Command.Call(new[] { "rustc", outputPath, "-C", "opt-level=2", "--out-dir", outDir });
                 if (run)
                 {
-                    var (_, stdout) = Command.Call(new[] { Path.GetFullPath(exePath) }, Command.Fatality.Fatal);
+                    var stdout = Command.Call(new[] { Path.GetFullPath(exePath) });
                     Console.Write(stdout);
                 }
                 break;
