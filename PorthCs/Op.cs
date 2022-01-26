@@ -14,4 +14,6 @@ internal class Op
         LineNumber = lineNumber;
         ColumnNumber = columnNumber;
     }
+
+    public override string ToString() => $"{Code}";
 }

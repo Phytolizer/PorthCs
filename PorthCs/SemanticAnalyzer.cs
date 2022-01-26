@@ -41,7 +41,11 @@ internal static class SemanticAnalyzer
                         case OpCode.Do:
                         {
                             var doOp = (IntegerOp)program[blockIp];
+                            // This 'end' shall point to the 'while' for simulation.
                             program[ip] = new IntegerOp(program[ip], doOp.Operand);
+                            var whileIp = (int)doOp.Operand;
+                            // The 'while' shall point to after this 'end' for simulation.
+                            program[whileIp] = new IntegerOp(program[whileIp], (ulong)ip + 1);
                             break;
                         }
                         default:
@@ -58,6 +62,9 @@ internal static class SemanticAnalyzer
                         throw new SemanticError(op, "'do' does not follow 'while'.");
                     }
 
+                    // This 'do' shall point to the 'while' for simulation and compilation.
+                    // For simulation, it is used to access the 'while' operand (which points after the loop body).
+                    // For compilation, it is used to break the Rust loop label.
                     program[ip] = new IntegerOp(program[ip], (ulong)blockIp);
                     stack.Push(ip);
                     break;

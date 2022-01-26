@@ -13,4 +13,6 @@ internal class IntegerOp : Op
     {
         Operand = operand;
     }
+
+    public override string ToString() => $"{Code}({Operand})";
 }
