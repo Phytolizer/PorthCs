@@ -14,5 +14,6 @@ internal enum OpCode
     While,
     Do,
     Dup,
+    Mem,
     Count,
 }

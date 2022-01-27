@@ -61,4 +61,9 @@ internal static class Ops
     {
         return new Op(OpCode.Dup, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
+
+    public static Op Mem(Token t)
+    {
+        return new Op(OpCode.Mem, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
 }

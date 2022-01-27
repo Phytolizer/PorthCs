@@ -11,13 +11,14 @@ internal static class Compiler
         using var writer = new StreamWriter(file, Encoding.UTF8);
 
         writer.Write(
-            @"
-                fn main() {
+            $@"
+                fn main() {{
                     let mut stack = Vec::<u64>::new();
+                    let mut memory = vec![0u8; {Memory.Capacity}];
             ");
 
-        Debug.Assert((int)OpCode.Count == 12, "OpCodes are not exhaustively handled in Compiler.Compile");
-        for (var ip = 0; ip < program.Count(); ip++)
+        Debug.Assert((int)OpCode.Count == 13, "OpCodes are not exhaustively handled in Compiler.Compile");
+        for (var ip = 0; ip < program.Count; ip++)
         {
             var op = program[ip];
             writer.WriteLine($"// -- {op.Code} --");
@@ -76,6 +77,9 @@ internal static class Compiler
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(a);");
                     writer.WriteLine("stack.push(a);");
+                    break;
+                case OpCode.Mem:
+                    writer.WriteLine("stack.push(0);");
                     break;
                 case OpCode.Count:
                     Debug.Fail("This is unreachable.");
