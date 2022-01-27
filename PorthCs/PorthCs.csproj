@@ -31,4 +31,8 @@
     <Folder Include="Examples\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SubCommand\SubCommand.csproj" />
+  </ItemGroup>
+
 </Project>

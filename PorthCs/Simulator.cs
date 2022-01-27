@@ -4,7 +4,7 @@ namespace PorthCs;
 
 internal static class Simulator
 {
-    public static void Simulate(IList<Op> program)
+    public static void Simulate(IList<Op> program, TextWriter writer)
     {
         Debug.Assert((int)OpCode.Count == 12, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
@@ -55,7 +55,7 @@ internal static class Simulator
                 case OpCode.Dump:
                 {
                     var a = stack.Pop();
-                    Console.WriteLine(a);
+                    writer.WriteLine(a);
                     ++ip;
                     break;
                 }

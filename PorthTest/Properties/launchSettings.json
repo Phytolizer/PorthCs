@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PorthTest": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthTest"
+    }
+  }
+}

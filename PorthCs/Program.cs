@@ -1,17 +1,19 @@
-﻿namespace PorthCs;
+﻿using SubCommand;
 
-internal static class Program
+namespace PorthCs;
+
+public static class Program
 {
-    private static void Usage()
+    private static void Usage(TextWriter writer)
     {
-        Console.WriteLine($"Usage: {Environment.ProcessPath ?? "porth"} <SUBCOMMAND> [ARGS]");
-        Console.WriteLine("  SUBCOMMANDS:");
-        Console.WriteLine("    sim <file>            Simulate the program");
-        Console.WriteLine("    com [OPTIONS] <file>  Compile the program");
-        Console.WriteLine("      OPTIONS:");
-        Console.WriteLine("        -r                  Run the program after successful compilation");
-        Console.WriteLine("        -o <file/dir>       Customize the output path");
-        Console.WriteLine("    help                  Print this message");
+        writer.WriteLine($"Usage: {Environment.ProcessPath ?? "porth"} <SUBCOMMAND> [ARGS]");
+        writer.WriteLine("  SUBCOMMANDS:");
+        writer.WriteLine("    sim <file>            Simulate the program");
+        writer.WriteLine("    com [OPTIONS] <file>  Compile the program");
+        writer.WriteLine("      OPTIONS:");
+        writer.WriteLine("        -r                  Run the program after successful compilation");
+        writer.WriteLine("        -o <file/dir>       Customize the output path");
+        writer.WriteLine("    help                  Print this message");
     }
 
     private static IEnumerable<Op> LoadProgramFromFile(string filePath)
@@ -21,15 +23,34 @@ internal static class Program
 
     public static void Main(string[] args)
     {
-        var argsIter = args.GetEnumerator();
-        if (!argsIter.MoveNext())
+        DoMain(args, Console.Out);
+    }
+
+    public static void DoMain(IEnumerable<string> args, TextWriter writer)
+    {
+        using var argsIter = args.GetEnumerator();
+
+        var quiet = false;
+        string? subcommand = null;
+        while (subcommand == null && argsIter.MoveNext())
         {
-            Usage();
-            Console.WriteLine("[ERROR] no subcommand is provided");
-            Environment.Exit(1);
+            var arg = argsIter.Current;
+            switch (arg)
+            {
+                case "-q":
+                    quiet = true;
+                    break;
+                default:
+                    subcommand = arg;
+                    break;
+            }
         }
 
-        var subcommand = argsIter.Current;
+        if (subcommand == null)
+        {
+            Usage(writer);
+            throw new UsageException("no subcommand is provided");
+        }
 
         switch (subcommand)
         {
@@ -37,14 +58,13 @@ internal static class Program
             {
                 if (!argsIter.MoveNext())
                 {
-                    Usage();
-                    Console.WriteLine("[ERROR] no input file is provided for the simulation");
-                    Environment.Exit(1);
+                    Usage(writer);
+                    throw new UsageException("no input file is provided for the simulation");
                 }
 
-                var programPath = (string)(argsIter.Current ?? throw new InvalidOperationException());
+                var programPath = argsIter.Current ?? throw new InvalidOperationException();
                 var program = LoadProgramFromFile(programPath);
-                Simulator.Simulate(program.ToList());
+                Simulator.Simulate(program.ToList(), writer);
             }
             break;
             case "com":
@@ -54,7 +74,7 @@ internal static class Program
                 string? outputPath = null;
                 while (programPath == null && argsIter.MoveNext())
                 {
-                    var flag = (string)(argsIter.Current ?? throw new InvalidOperationException());
+                    var flag = argsIter.Current ?? throw new InvalidOperationException();
                     switch (flag)
                     {
                         case "-r":
@@ -63,12 +83,11 @@ internal static class Program
                         case "-o":
                             if (!argsIter.MoveNext())
                             {
-                                Usage();
-                                Console.WriteLine("[ERROR] no argument is provided for parameter '-o'");
-                                Environment.Exit(1);
+                                Usage(writer);
+                                throw new UsageException("no argument is provided for parameter '-o'");
                             }
 
-                            outputPath = (string)(argsIter.Current ?? throw new InvalidOperationException());
+                            outputPath = argsIter.Current ?? throw new InvalidOperationException();
                             break;
                         default:
                             programPath = flag;
@@ -77,9 +96,8 @@ internal static class Program
                 }
                 if (programPath == null)
                 {
-                    Usage();
-                    Console.WriteLine("[ERROR] no input file is provided for the compilation");
-                    Environment.Exit(1);
+                    Usage(writer);
+                    throw new UsageException("no input file is provided for the compilation");
                 }
 
                 string? baseName;
@@ -99,28 +117,30 @@ internal static class Program
 
                 var program = LoadProgramFromFile(programPath);
                 var outDir = Path.GetDirectoryName(programPath) ?? throw new InvalidOperationException();
-                Console.WriteLine($"[INFO] Generating {basePath}.rs ...");
-                Compiler.Compile(program.ToList(), $"{basePath}.rs");
-                Command.Call(new[] { "rustfmt", $"{basePath}.rs" });
+                if (!quiet)
+                {
+                    writer.WriteLine($"[INFO] Generating {basePath}.rs ...");
+                }
 
-                var exeName = Command.Call(new[] { "rustc", $"{basePath}.rs", "--print", "file-names" });
+                Compiler.Compile(program.ToList(), $"{basePath}.rs");
+                Command.Call(new[] { "rustfmt", $"{basePath}.rs" }, quiet);
+
+                var exeName = Command.Call(new[] { "rustc", $"{basePath}.rs", "--print", "file-names" }, quiet);
                 var exePath = Path.GetFullPath(Path.Join(outDir, exeName.TrimEnd()));
-                Command.Call(new[] { "rustc", $"{basePath}.rs", "-C", "opt-level=2", "--out-dir", outDir });
+                Command.Call(new[] { "rustc", $"{basePath}.rs", "-C", "opt-level=2", "--out-dir", outDir }, quiet);
                 if (run)
                 {
-                    var stdout = Command.Call(new[] { Path.GetFullPath(exePath) });
-                    Console.Write(stdout);
+                    var stdout = Command.Call(new[] { Path.GetFullPath(exePath) }, quiet);
+                    writer.Write(stdout);
                 }
                 break;
             }
             case "help":
-                Usage();
+                Usage(writer);
                 break;
             default:
-                Usage();
-                Console.WriteLine($"[ERROR] unknown subcommand {subcommand}");
-                Environment.Exit(1);
-                break;
+                Usage(writer);
+                throw new UsageException($"unknown subcommand {subcommand}");
         }
     }
 }

@@ -1,12 +1,16 @@
 ﻿using System.Diagnostics;
 
-namespace PorthCs;
+namespace SubCommand;
 
 public static class Command
 {
-    public static string Call(string[] args)
+    public static string Call(string[] args, bool quiet)
     {
-        Console.WriteLine($"[CMD] {string.Join(' ', args)}");
+        if (!quiet)
+        {
+            Console.WriteLine($"[CMD] {string.Join(' ', args)}");
+        }
+
         var startInfo = new ProcessStartInfo
         {
             FileName = args[0],
@@ -18,11 +22,7 @@ public static class Command
             RedirectStandardError = true
         };
 
-        var process = Process.Start(startInfo);
-        if (process == null)
-        {
-            throw new SubcommandException(args);
-        }
+        using var process = Process.Start(startInfo) ?? throw new StartException(args);
 
         process.WaitForExit();
         if (process.ExitCode == 0)
@@ -31,6 +31,6 @@ public static class Command
         }
 
         Console.Error.Write(process.StandardError.ReadToEnd());
-        throw new SubcommandException(args);
+        throw new ExitCodeException(args);
     }
 }
