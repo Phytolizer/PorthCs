@@ -13,7 +13,7 @@ internal static class Parser
                 return Ops.Plus(tok);
             case "-":
                 return Ops.Minus(tok);
-            case ".":
+            case "dump":
                 return Ops.Dump(tok);
             case "=":
                 return Ops.Equal(tok);
