@@ -6,7 +6,7 @@ internal static class Parser
 {
     public static Op ParseTokenAsOp(Token tok)
     {
-        Debug.Assert((int)OpCode.Count == 15, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
+        Debug.Assert((int)OpCode.Count == 17, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
         switch (tok.Word)
         {
             case "+":
@@ -37,15 +37,17 @@ internal static class Parser
                 return Ops.Load(tok);
             case ".":
                 return Ops.Store(tok);
+            case "syscall1":
+                return Ops.Syscall1(tok);
+            case "syscall3":
+                return Ops.Syscall3(tok);
             default:
                 if (ulong.TryParse(tok.Word, out var value))
                 {
                     return Ops.Push(tok, value);
                 }
-                else
-                {
-                    throw new ParserError(tok, "Unknown token");
-                }
+
+                throw new ParserError(tok, "Unknown token");
         }
     }
 }

@@ -6,7 +6,7 @@ internal static class Simulator
 {
     public static void Simulate(IList<Op> program, TextWriter writer)
     {
-        Debug.Assert((int)OpCode.Count == 15, "OpCodes are not exhaustively handled in Simulator.Simulate.");
+        Debug.Assert((int)OpCode.Count == 17, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
         var mem = new char[Memory.Capacity];
         for (var ip = 0; ip < program.Count;)
@@ -115,7 +115,7 @@ internal static class Simulator
                     break;
                 }
                 case OpCode.Mem:
-                    stack.Push(0);
+                    stack.Push((ulong)0);
                     ++ip;
                     break;
                 case OpCode.Load:
@@ -133,9 +133,43 @@ internal static class Simulator
                     ++ip;
                     break;
                 }
-                case OpCode.Count:
-                    Debug.Fail("This is unreachable.");
+                case OpCode.Syscall1:
+                {
+                    throw new NotImplementedException("Syscall1");
+                }
+                case OpCode.Syscall3:
+                {
+                    var syscall = (ulong)stack.Pop();
+                    var arg1 = (ulong)stack.Pop();
+                    var arg2 = (ulong)stack.Pop();
+                    var arg3 = (ulong)stack.Pop();
+                    switch (syscall)
+                    {
+                        case 1:
+                        {
+                            switch (arg1)
+                            {
+                                case 1:
+                                    writer.Write(mem[(int)arg2..(int)(arg2 + arg3)]);
+                                    break;
+                                case 2:
+                                    Console.Error.WriteLine(mem[(int)arg2..(int)(arg2 + arg3)]);
+                                    break;
+                                default:
+                                    throw new UnknownFileDescriptorException(arg1);
+                            }
+
+                            break;
+                        }
+                        default:
+                            throw new UnknownSyscallException(syscall);
+                    }
+
+                    ++ip;
                     break;
+                }
+                case OpCode.Count:
+                    throw new InvalidOperationException("unreachable");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(program));
             }

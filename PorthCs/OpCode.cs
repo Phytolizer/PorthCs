@@ -17,5 +17,7 @@ internal enum OpCode
     Mem,
     Load,
     Store,
+    Syscall1,
+    Syscall3,
     Count
 }

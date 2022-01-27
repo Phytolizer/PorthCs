@@ -12,12 +12,28 @@ internal static class Compiler
 
         writer.Write(
             $@"
+                use std::io::Write;
+
+                fn do_syscall(mem: &mut [u8], number: u64, args: Vec<u64>) {{
+                    match number {{
+                        1 => match args[0] {{
+                            1 => {{
+                                std::io::stdout().write(&mem[args[1] as usize..args[2] as usize]).unwrap();
+                            }}
+                            2 => {{
+                                std::io::stderr().write(&mem[args[1] as usize..args[2] as usize]).unwrap();
+                            }}
+                            _ => panic!(""unknown file descriptor {{}}"", args[0]),
+                        }}
+                        _ => panic!(""unknown syscall number {{}}"", number),
+                    }}
+                }}
                 fn main() {{
                     let mut stack = Vec::<u64>::new();
                     let mut memory = vec![0u8; {Memory.Capacity}];
             ");
 
-        Debug.Assert((int)OpCode.Count == 15, "OpCodes are not exhaustively handled in Compiler.Compile");
+        Debug.Assert((int)OpCode.Count == 17, "OpCodes are not exhaustively handled in Compiler.Compile");
         for (var ip = 0; ip < program.Count; ip++)
         {
             var op = program[ip];
@@ -83,16 +99,25 @@ internal static class Compiler
                     break;
                 case OpCode.Load:
                     writer.WriteLine("let a = stack.pop().unwrap();");
-                    writer.WriteLine("stack.push(mem[a as usize] as u64);");
+                    writer.WriteLine("stack.push(memory[a as usize] as u64);");
                     break;
                 case OpCode.Store:
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
-                    writer.WriteLine("mem[a as usize] = b as u8;");
+                    writer.WriteLine("memory[a as usize] = b as u8;");
+                    break;
+                case OpCode.Syscall1:
+                    writer.WriteLine("panic!(\"this is not implemented :(\");");
+                    break;
+                case OpCode.Syscall3:
+                    writer.WriteLine("let syscall_number = stack.pop().unwrap();");
+                    writer.WriteLine("let arg1 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg2 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg3 = stack.pop().unwrap();");
+                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3]);");
                     break;
                 case OpCode.Count:
-                    Debug.Fail("This is unreachable.");
-                    break;
+                    throw new InvalidOperationException("unreachable");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(program));
             }
