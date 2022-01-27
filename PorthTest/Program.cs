@@ -1,6 +1,4 @@
-﻿using SubCommand;
-
-var tests = Path.Join(Environment.CurrentDirectory, "Tests");
+﻿var tests = Path.Join(Environment.CurrentDirectory, "Tests");
 foreach (var test in Directory.GetFiles(tests, "*.porth", SearchOption.AllDirectories))
 {
     Console.WriteLine($"[INFO] Testing {test}");
