@@ -15,5 +15,7 @@ internal enum OpCode
     Do,
     Dup,
     Mem,
-    Count,
+    Load,
+    Store,
+    Count
 }

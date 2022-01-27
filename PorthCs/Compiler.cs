@@ -17,7 +17,7 @@ internal static class Compiler
                     let mut memory = vec![0u8; {Memory.Capacity}];
             ");
 
-        Debug.Assert((int)OpCode.Count == 13, "OpCodes are not exhaustively handled in Compiler.Compile");
+        Debug.Assert((int)OpCode.Count == 15, "OpCodes are not exhaustively handled in Compiler.Compile");
         for (var ip = 0; ip < program.Count; ip++)
         {
             var op = program[ip];
@@ -80,6 +80,15 @@ internal static class Compiler
                     break;
                 case OpCode.Mem:
                     writer.WriteLine("stack.push(0);");
+                    break;
+                case OpCode.Load:
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(mem[a as usize] as u64);");
+                    break;
+                case OpCode.Store:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("mem[a as usize] = b as u8;");
                     break;
                 case OpCode.Count:
                     Debug.Fail("This is unreachable.");
