@@ -27,6 +27,11 @@ internal static class Ops
         return new Op(OpCode.Equal, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
 
+    public static Op Lt(Token t)
+    {
+        return new Op(OpCode.Lt, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
     public static Op Gt(Token t)
     {
         return new Op(OpCode.Gt, t.FilePath, t.LineNumber, t.ColumnNumber);
@@ -60,6 +65,11 @@ internal static class Ops
     public static Op Dup(Token t)
     {
         return new Op(OpCode.Dup, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
+    public static Op Dup2(Token t)
+    {
+        return new Op(OpCode.Dup2, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
 
     public static Op Mem(Token t)

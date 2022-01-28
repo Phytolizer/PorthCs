@@ -33,7 +33,7 @@ internal static class Compiler
                     let mut memory = vec![0u8; {Memory.Capacity}];
             ");
 
-        Debug.Assert((int)OpCode.Count == 21, "OpCodes are not exhaustively handled in Compiler.Compile");
+        Debug.Assert((int)OpCode.Count == 23, "OpCodes are not exhaustively handled in Compiler.Compile");
         for (var ip = 0; ip < program.Count; ip++)
         {
             var op = program[ip];
@@ -60,6 +60,11 @@ internal static class Compiler
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(if a == b { 1 } else { 0 });");
+                    break;
+                case OpCode.Lt:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(if a < b { 1 } else { 0 });");
                     break;
                 case OpCode.Gt:
                     writer.WriteLine("let b = stack.pop().unwrap();");
@@ -93,6 +98,14 @@ internal static class Compiler
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(a);");
                     writer.WriteLine("stack.push(a);");
+                    break;
+                case OpCode.Dup2:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(a);");
+                    writer.WriteLine("stack.push(b);");
+                    writer.WriteLine("stack.push(a);");
+                    writer.WriteLine("stack.push(b);");
                     break;
                 case OpCode.Mem:
                     writer.WriteLine("stack.push(0);");
