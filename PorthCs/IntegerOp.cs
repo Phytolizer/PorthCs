@@ -9,10 +9,13 @@ internal class IntegerOp : Op
         Operand = operand;
     }
 
-    public IntegerOp(Op op, ulong operand) : base(op.Code, op.FilePath, op.LineNumber, op.ColumnNumber)
+    public IntegerOp(Op op, ulong operand) : base(op.Code, op.Token)
     {
         Operand = operand;
     }
 
-    public override string ToString() => $"{Code}({Operand})";
+    public override string ToString()
+    {
+        return $"{Code}({Operand})";
+    }
 }

@@ -3,16 +3,12 @@
 internal class Op
 {
     public OpCode Code { get; }
-    public string FilePath { get; }
-    public int LineNumber { get; }
-    public int ColumnNumber { get; }
+    public Token Token { get; }
 
-    public Op(OpCode code, Token t)
+    public Op(OpCode code, Token token)
     {
         Code = code;
-        FilePath = t.FilePath;
-        LineNumber = t.LineNumber;
-        ColumnNumber = t.ColumnNumber;
+        Token = token;
     }
 
     public override string ToString()
