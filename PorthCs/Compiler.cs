@@ -33,7 +33,7 @@ internal static class Compiler
                     let mut memory = vec![0u8; {Memory.Capacity}];
             ");
 
-        Debug.Assert((int)OpCode.Count == 17, "OpCodes are not exhaustively handled in Compiler.Compile");
+        Debug.Assert((int)OpCode.Count == 21, "OpCodes are not exhaustively handled in Compiler.Compile");
         for (var ip = 0; ip < program.Count; ip++)
         {
             var op = program[ip];
@@ -107,7 +107,15 @@ internal static class Compiler
                     writer.WriteLine("memory[a as usize] = b as u8;");
                     break;
                 case OpCode.Syscall1:
-                    writer.WriteLine("panic!(\"this is not implemented :(\");");
+                    writer.WriteLine("let syscall_number = stack.pop().unwrap();");
+                    writer.WriteLine("let arg1 = stack.pop().unwrap();");
+                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1]);");
+                    break;
+                case OpCode.Syscall2:
+                    writer.WriteLine("let syscall_number = stack.pop().unwrap();");
+                    writer.WriteLine("let arg1 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg2 = stack.pop().unwrap();");
+                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2]);");
                     break;
                 case OpCode.Syscall3:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
@@ -115,6 +123,33 @@ internal static class Compiler
                     writer.WriteLine("let arg2 = stack.pop().unwrap();");
                     writer.WriteLine("let arg3 = stack.pop().unwrap();");
                     writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3]);");
+                    break;
+                case OpCode.Syscall4:
+                    writer.WriteLine("let syscall_number = stack.pop().unwrap();");
+                    writer.WriteLine("let arg1 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg2 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg3 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg4 = stack.pop().unwrap();");
+                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4]);");
+                    break;
+                case OpCode.Syscall5:
+                    writer.WriteLine("let syscall_number = stack.pop().unwrap();");
+                    writer.WriteLine("let arg1 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg2 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg3 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg4 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg5 = stack.pop().unwrap();");
+                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4, arg5]);");
+                    break;
+                case OpCode.Syscall6:
+                    writer.WriteLine("let syscall_number = stack.pop().unwrap();");
+                    writer.WriteLine("let arg1 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg2 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg3 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg4 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg5 = stack.pop().unwrap();");
+                    writer.WriteLine("let arg6 = stack.pop().unwrap();");
+                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4, arg5, arg6]);");
                     break;
                 case OpCode.Count:
                     throw new InvalidOperationException("unreachable");

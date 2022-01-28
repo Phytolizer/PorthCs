@@ -18,6 +18,10 @@ internal enum OpCode
     Load,
     Store,
     Syscall1,
+    Syscall2,
     Syscall3,
+    Syscall4,
+    Syscall5,
+    Syscall6,
     Count
 }

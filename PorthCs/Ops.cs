@@ -86,4 +86,24 @@ internal static class Ops
     {
         return new Op(OpCode.Syscall3, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
+
+    public static Op Syscall2(Token t)
+    {
+        return new Op(OpCode.Syscall2, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
+    public static Op Syscall4(Token t)
+    {
+        return new Op(OpCode.Syscall4, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
+    public static Op Syscall5(Token t)
+    {
+        return new Op(OpCode.Syscall5, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
+    public static Op Syscall6(Token t)
+    {
+        return new Op(OpCode.Syscall6, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
 }

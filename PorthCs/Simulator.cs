@@ -6,7 +6,7 @@ internal static class Simulator
 {
     public static void Simulate(IList<Op> program, TextWriter writer)
     {
-        Debug.Assert((int)OpCode.Count == 17, "OpCodes are not exhaustively handled in Simulator.Simulate.");
+        Debug.Assert((int)OpCode.Count == 21, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
         var mem = new char[Memory.Capacity];
         for (var ip = 0; ip < program.Count;)
@@ -137,6 +137,10 @@ internal static class Simulator
                 {
                     throw new NotImplementedException("Syscall1");
                 }
+                case OpCode.Syscall2:
+                {
+                    throw new NotImplementedException("Syscall2");
+                }
                 case OpCode.Syscall3:
                 {
                     var syscall = (ulong)stack.Pop();
@@ -167,6 +171,18 @@ internal static class Simulator
 
                     ++ip;
                     break;
+                }
+                case OpCode.Syscall4:
+                {
+                    throw new NotImplementedException("Syscall4");
+                }
+                case OpCode.Syscall5:
+                {
+                    throw new NotImplementedException("Syscall5");
+                }
+                case OpCode.Syscall6:
+                {
+                    throw new NotImplementedException("Syscall6");
                 }
                 case OpCode.Count:
                     throw new InvalidOperationException("unreachable");
