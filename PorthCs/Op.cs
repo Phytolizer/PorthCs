@@ -7,13 +7,16 @@ internal class Op
     public int LineNumber { get; }
     public int ColumnNumber { get; }
 
-    public Op(OpCode code, string filePath, int lineNumber, int columnNumber)
+    public Op(OpCode code, Token t)
     {
         Code = code;
-        FilePath = filePath;
-        LineNumber = lineNumber;
-        ColumnNumber = columnNumber;
+        FilePath = t.FilePath;
+        LineNumber = t.LineNumber;
+        ColumnNumber = t.ColumnNumber;
     }
 
-    public override string ToString() => $"{Code}";
+    public override string ToString()
+    {
+        return Code.ToString();
+    }
 }
