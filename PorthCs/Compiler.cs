@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 
 namespace PorthCs;
 
@@ -134,6 +133,13 @@ internal static class Compiler
                     break;
                 case OpCode.Drop:
                     writer.WriteLine("stack.pop();");
+                    break;
+                case OpCode.Over:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(a);");
+                    writer.WriteLine("stack.push(b);");
+                    writer.WriteLine("stack.push(a);");
                     break;
                 case OpCode.Mem:
                     writer.WriteLine("stack.push(0);");

@@ -83,6 +83,7 @@ internal static class SemanticAnalyzer
                 case OpCode.Dup2:
                 case OpCode.Swap:
                 case OpCode.Drop:
+                case OpCode.Over:
                 case OpCode.Mem:
                 case OpCode.Load:
                 case OpCode.Store:

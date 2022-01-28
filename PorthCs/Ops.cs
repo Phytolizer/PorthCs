@@ -102,6 +102,11 @@ internal static class Ops
         return new Op(OpCode.Drop, t);
     }
 
+    public static Op Over(Token t)
+    {
+        return new Op(OpCode.Over, t);
+    }
+
     public static Op Mem(Token t)
     {
         return new Op(OpCode.Mem, t);

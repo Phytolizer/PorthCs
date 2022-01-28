@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace PorthCs;
+﻿namespace PorthCs;
 
 internal static class Simulator
 {
@@ -177,6 +175,16 @@ internal static class Simulator
                     stack.Pop();
                     ++ip;
                     break;
+                case OpCode.Over:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a);
+                    stack.Push(b);
+                    stack.Push(a);
+                    ++ip;
+                    break;
+                }
                 case OpCode.Mem:
                     stack.Push((ulong)0);
                     ++ip;

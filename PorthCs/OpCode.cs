@@ -22,6 +22,7 @@ internal enum OpCode
     Dup2,
     Swap,
     Drop,
+    Over,
     Mem,
     Load,
     Store,

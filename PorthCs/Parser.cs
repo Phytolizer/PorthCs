@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace PorthCs;
+﻿namespace PorthCs;
 
 internal static class Parser
 {
@@ -46,6 +44,8 @@ internal static class Parser
                 return Ops.Swap(tok);
             case "drop":
                 return Ops.Drop(tok);
+            case "over":
+                return Ops.Over(tok);
             case "mem":
                 return Ops.Mem(tok);
             case ",":
