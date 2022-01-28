@@ -60,6 +60,38 @@ internal static class Simulator
                     ++ip;
                     break;
                 }
+                case OpCode.Shr:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a >> (int)b);
+                    ++ip;
+                    break;
+                }
+                case OpCode.Shl:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a << (int)b);
+                    ++ip;
+                    break;
+                }
+                case OpCode.Bor:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a | b);
+                    ++ip;
+                    break;
+                }
+                case OpCode.Band:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a & b);
+                    ++ip;
+                    break;
+                }
                 case OpCode.Dump:
                 {
                     var a = stack.Pop();

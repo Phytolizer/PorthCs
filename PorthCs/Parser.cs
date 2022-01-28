@@ -20,6 +20,14 @@ internal static class Parser
                 return Ops.Lt(tok);
             case ">":
                 return Ops.Gt(tok);
+            case "shr":
+                return Ops.Shr(tok);
+            case "shl":
+                return Ops.Shl(tok);
+            case "bor":
+                return Ops.Bor(tok);
+            case "band":
+                return Ops.Band(tok);
             case "if":
                 return Ops.If(tok);
             case "end":

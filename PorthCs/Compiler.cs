@@ -70,6 +70,26 @@ internal static class Compiler
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(if a > b { 1 } else { 0 });");
                     break;
+                case OpCode.Shr:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(a >> b);");
+                    break;
+                case OpCode.Shl:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(a << b);");
+                    break;
+                case OpCode.Bor:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(a | b);");
+                    break;
+                case OpCode.Band:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(a & b);");
+                    break;
                 case OpCode.Dump:
                     writer.WriteLine(@"println!(""{}"", stack.pop().unwrap());");
                     break;

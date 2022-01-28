@@ -74,6 +74,10 @@ internal static class SemanticAnalyzer
                 case OpCode.Equal:
                 case OpCode.Lt:
                 case OpCode.Gt:
+                case OpCode.Shr:
+                case OpCode.Shl:
+                case OpCode.Bor:
+                case OpCode.Band:
                 case OpCode.Dump:
                 case OpCode.Dup:
                 case OpCode.Dup2:
