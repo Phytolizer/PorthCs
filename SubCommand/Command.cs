@@ -4,7 +4,7 @@ namespace SubCommand;
 
 public static class Command
 {
-    public static string Call(string[] args, bool quiet)
+    public static string Call(string[] args, bool quiet = false)
     {
         if (!quiet)
         {
