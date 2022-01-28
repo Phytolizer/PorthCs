@@ -6,7 +6,7 @@ internal static class Simulator
 {
     public static void Simulate(IList<Op> program, TextWriter writer)
     {
-        Debug.Assert((int)OpCode.Count == 23, "OpCodes are not exhaustively handled in Simulator.Simulate.");
+        Debug.Assert((int)OpCode.Count == 24, "OpCodes are not exhaustively handled in Simulator.Simulate.");
         var stack = new Stack<object>();
         var mem = new char[Memory.Capacity];
         for (var ip = 0; ip < program.Count;)
@@ -130,6 +130,15 @@ internal static class Simulator
                     stack.Push(b);
                     stack.Push(a);
                     stack.Push(b);
+                    ++ip;
+                    break;
+                }
+                case OpCode.Swap:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(b);
+                    stack.Push(a);
                     ++ip;
                     break;
                 }

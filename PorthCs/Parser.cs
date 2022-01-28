@@ -6,7 +6,7 @@ internal static class Parser
 {
     public static Op ParseTokenAsOp(Token tok)
     {
-        Debug.Assert((int)OpCode.Count == 23, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
+        Debug.Assert((int)OpCode.Count == 24, "OpCodes are not exhaustively handled in Parser.ParseTokenAsOp.");
         switch (tok.Word)
         {
             case "+":
@@ -35,6 +35,8 @@ internal static class Parser
                 return Ops.Dup(tok);
             case "2dup":
                 return Ops.Dup2(tok);
+            case "swap":
+                return Ops.Swap(tok);
             case "mem":
                 return Ops.Mem(tok);
             case ",":

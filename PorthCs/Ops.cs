@@ -72,6 +72,11 @@ internal static class Ops
         return new Op(OpCode.Dup2, t.FilePath, t.LineNumber, t.ColumnNumber);
     }
 
+    public static Op Swap(Token t)
+    {
+        return new Op(OpCode.Swap, t.FilePath, t.LineNumber, t.ColumnNumber);
+    }
+
     public static Op Mem(Token t)
     {
         return new Op(OpCode.Mem, t.FilePath, t.LineNumber, t.ColumnNumber);
