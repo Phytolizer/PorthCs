@@ -142,6 +142,11 @@ internal static class Ops
         return new Op(OpCode.Store, t);
     }
 
+    public static Op Syscall0(Token t)
+    {
+        return new Op(OpCode.Syscall0, t);
+    }
+
     public static Op Syscall1(Token t)
     {
         return new Op(OpCode.Syscall1, t);

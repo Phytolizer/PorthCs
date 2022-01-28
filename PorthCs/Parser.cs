@@ -60,6 +60,8 @@ internal static class Parser
                 return Ops.Load(tok);
             case ".":
                 return Ops.Store(tok);
+            case "syscall0":
+                return Ops.Syscall0(tok);
             case "syscall1":
                 return Ops.Syscall1(tok);
             case "syscall2":

@@ -30,6 +30,7 @@ internal enum OpCode
     Mem,
     Load,
     Store,
+    Syscall0,
     Syscall1,
     Syscall2,
     Syscall3,

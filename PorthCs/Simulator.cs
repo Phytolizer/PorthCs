@@ -236,6 +236,21 @@ internal static class Simulator
                     ++ip;
                     break;
                 }
+                case OpCode.Syscall0:
+                {
+                    var syscallNumber = (ulong)stack.Pop();
+                    switch (syscallNumber)
+                    {
+                        case 39:
+                            stack.Push((ulong)Environment.ProcessId);
+                            break;
+                        default:
+                            throw new UnknownSyscallException(syscallNumber);
+                    }
+
+                    ++ip;
+                    break;
+                }
                 case OpCode.Syscall1:
                 {
                     throw new NotImplementedException("Syscall1");

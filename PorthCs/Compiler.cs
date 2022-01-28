@@ -24,6 +24,7 @@ internal static class Compiler
                             }}
                             _ => panic!(""unknown file descriptor {{}}"", args[0]),
                         }}
+                        39 => return std::process::id() as u64,
                         _ => panic!(""unknown syscall number {{}}"", number),
                     }}
                 }}
@@ -172,6 +173,11 @@ internal static class Compiler
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("memory[a as usize] = b as u8;");
+                    break;
+                case OpCode.Syscall0:
+                    writer.WriteLine("let syscall_number = stack.pop().unwrap();");
+                    writer.WriteLine("let result = do_syscall(&mut memory, syscall_number, vec![]);");
+                    writer.WriteLine("stack.push(result);");
                     break;
                 case OpCode.Syscall1:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
