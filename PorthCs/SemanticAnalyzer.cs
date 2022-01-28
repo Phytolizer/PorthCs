@@ -112,5 +112,5 @@ internal class SemanticError : Exception
         _message = message;
     }
 
-    public override string Message => $"{_op.FilePath}:{_op.LineNumber}:{_op.ColumnNumber}: {_message}";
+    public override string Message => $"{_op.Token.FilePath}:{_op.Token.LineNumber}:{_op.Token.ColumnNumber}: {_message}";
 }

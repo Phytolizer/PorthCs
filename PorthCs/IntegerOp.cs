@@ -4,7 +4,7 @@ internal class IntegerOp : Op
 {
     public ulong Operand { get; }
 
-    public IntegerOp(OpCode code, string filePath, int lineNumber, int columnNumber, ulong operand) : base(code, filePath, lineNumber, columnNumber)
+    public IntegerOp(OpCode code, Token token, ulong operand) : base(code, token)
     {
         Operand = operand;
     }

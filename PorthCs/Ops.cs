@@ -4,7 +4,7 @@ internal static class Ops
 {
     public static Op Push(Token t, ulong x)
     {
-        return new IntegerOp(OpCode.Push, t.FilePath, t.LineNumber, t.ColumnNumber, x);
+        return new IntegerOp(OpCode.Push, t, x);
     }
 
     public static Op Plus(Token t)
