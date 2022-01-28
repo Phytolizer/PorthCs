@@ -22,9 +22,9 @@ internal static class Ops
         return new Op(OpCode.Mod, t);
     }
 
-    public static Op Dump(Token t)
+    public static Op Print(Token t)
     {
-        return new Op(OpCode.Dump, t);
+        return new Op(OpCode.Print, t);
     }
 
     public static Op Eq(Token t)

@@ -12,8 +12,8 @@ internal static class Parser
                 return Ops.Minus(tok);
             case "mod":
                 return Ops.Mod(tok);
-            case "dump":
-                return Ops.Dump(tok);
+            case "print":
+                return Ops.Print(tok);
             case "=":
                 return Ops.Eq(tok);
             case "!=":

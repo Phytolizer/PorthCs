@@ -110,7 +110,7 @@ internal static class Compiler
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(a & b);");
                     break;
-                case OpCode.Dump:
+                case OpCode.Print:
                     writer.WriteLine(@"println!(""{}"", stack.pop().unwrap());");
                     break;
                 case OpCode.If:

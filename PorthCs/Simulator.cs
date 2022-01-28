@@ -122,7 +122,7 @@ internal static class Simulator
                     ++ip;
                     break;
                 }
-                case OpCode.Dump:
+                case OpCode.Print:
                 {
                     var a = stack.Pop();
                     writer.WriteLine(a);

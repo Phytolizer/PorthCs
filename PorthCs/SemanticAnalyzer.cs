@@ -82,7 +82,7 @@ internal static class SemanticAnalyzer
                 case OpCode.Shl:
                 case OpCode.Bor:
                 case OpCode.Band:
-                case OpCode.Dump:
+                case OpCode.Print:
                 case OpCode.Dup:
                 case OpCode.Dup2:
                 case OpCode.Swap:

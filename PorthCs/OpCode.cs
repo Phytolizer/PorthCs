@@ -16,7 +16,7 @@ internal enum OpCode
     Shl,
     Bor,
     Band,
-    Dump,
+    Print,
     If,
     End,
     Else,
