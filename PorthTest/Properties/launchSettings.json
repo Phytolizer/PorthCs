@@ -3,6 +3,11 @@
     "PorthTest": {
       "commandName": "Project",
       "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthTest"
+    },
+    "PorthTest record": {
+      "commandName": "Project",
+      "commandLineArgs": "record",
+      "workingDirectory": "C:\\Users\\kyle\\Documents\\Git\\PorthCs\\PorthTest"
     }
   }
 }

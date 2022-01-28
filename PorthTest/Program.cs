@@ -1,21 +1,104 @@
-﻿var tests = Path.Join(Environment.CurrentDirectory, "Tests");
-foreach (var test in Directory.GetFiles(tests, "*.porth", SearchOption.AllDirectories))
+﻿using PorthTest;
+
+using var argsIter = ((IEnumerable<string>)args).GetEnumerator();
+
+if (!argsIter.MoveNext())
 {
-    Console.WriteLine($"[INFO] Testing {test}");
-    var writer = new StringWriter();
-    PorthCs.Program.DoMain(new[] { "sim", test }, writer);
-    var simOutput = string.Join('\n', writer.ToString().Split(Environment.NewLine));
-    writer = new StringWriter();
-    PorthCs.Program.DoMain(new[] { "-q", "com", "-r", test }, writer);
-    var comOutput = writer.ToString();
-    if (simOutput != comOutput)
+    Test();
+}
+else
+{
+    var subcommand = argsIter.Current;
+    switch (subcommand)
     {
-        Console.WriteLine("[ERROR] Output discrepancy between simulation and compilation");
-        Console.WriteLine("  Simulation output:");
-        Console.WriteLine(string.Join("\n", simOutput.Split("\n").Select(line => $"    {line}")));
-        Console.WriteLine("  Compilation output:");
-        Console.WriteLine(string.Join("\n", comOutput.Split("\n").Select(line => $"    {line}")));
-        Environment.Exit(1);
+        case "record":
+            Record();
+            break;
+        case "test":
+            Test();
+            break;
+        case "help":
+            Usage();
+            break;
+        default:
+            Usage();
+            Console.WriteLine($"[ERROR] Unknown subcommand: {subcommand}.");
+            Environment.ExitCode = 1;
+            break;
     }
-    Console.WriteLine($"[INFO] {test} OK");
+}
+
+void Usage()
+{
+    Console.WriteLine($"Usage: {Environment.ProcessPath ?? "PorthTest"} [SUBCOMMAND]");
+    Console.WriteLine("  SUBCOMMANDS:");
+    Console.WriteLine("    test    Run the tests. (Default operation when no subcommand is provided.)");
+    Console.WriteLine("    record  Record the expected output of the tests.");
+    Console.WriteLine("    help    Print this message.");
+}
+
+void Record()
+{
+    var tests = Path.Join(Environment.CurrentDirectory, "Tests");
+    foreach (var test in Directory.GetFiles(tests, "*.porth", SearchOption.AllDirectories))
+    {
+        var simOutput = RecordSimOutput(test);
+        var txtPath = Path.ChangeExtension(test, ".txt");
+        Console.WriteLine($"[INFO] Saving output to {txtPath}");
+        using var txtFile = File.CreateText(txtPath);
+        txtFile.Write(simOutput);
+    }
+}
+
+void Test()
+{
+    var tests = Path.Join(Environment.CurrentDirectory, "Tests");
+    foreach (var test in Directory.GetFiles(tests, "*.porth", SearchOption.AllDirectories))
+    {
+        Console.WriteLine($"[INFO] Testing {test}");
+        var txtPath = Path.ChangeExtension(test, ".txt");
+        var txtFile = File.OpenText(txtPath);
+        var expectedOutput = txtFile.ReadToEnd().ReplaceLineEndings("\n");
+        txtFile.Close();
+        var simOutput = RecordSimOutput(test);
+        if (simOutput != expectedOutput)
+        {
+            Console.WriteLine("[ERROR] Unexpected simulation output");
+            Console.WriteLine("  Expected:");
+            Console.WriteLine(IndentMultiLineString(expectedOutput, "    "));
+            Console.WriteLine("  Actual:");
+            Console.WriteLine(IndentMultiLineString(simOutput, "    "));
+            throw new TestFailureException();
+        }
+        var comOutput = RecordComOutput(test);
+        if (comOutput != expectedOutput)
+        {
+            Console.WriteLine("[ERROR] Unexpected simulation output");
+            Console.WriteLine("  Expected:");
+            Console.WriteLine(IndentMultiLineString(expectedOutput, "    "));
+            Console.WriteLine("  Actual:");
+            Console.WriteLine(IndentMultiLineString(comOutput, "    "));
+            throw new TestFailureException();
+        }
+        Console.WriteLine($"[INFO] {test} OK");
+    }
+}
+
+string RecordSimOutput(string s)
+{
+    var writer = new StringWriter();
+    PorthCs.Program.DoMain(new[] { "sim", s }, writer);
+    return writer.ToString().ReplaceLineEndings("\n");
+}
+
+string RecordComOutput(string s)
+{
+    var writer = new StringWriter();
+    PorthCs.Program.DoMain(new[] { "-q", "com", "-r", s }, writer);
+    return writer.ToString();
+}
+
+string IndentMultiLineString(string str, string indent)
+{
+    return string.Join("\n", str.Split("\n").Select(line => indent + line));
 }
