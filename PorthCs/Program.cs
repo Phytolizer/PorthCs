@@ -154,7 +154,12 @@ public static class Program
                 Command.Call(new[] { "rustc", $"{basePath}.rs", "-C", "opt-level=2", "--out-dir", outDir }, quiet);
                 if (run)
                 {
-                    var stdout = Command.Call(new[] { Path.GetFullPath(exePath) }, quiet);
+                    var collectArgs = new List<string>();
+                    while (argsIter.MoveNext())
+                    {
+                        collectArgs.Add(argsIter.Current);
+                    }
+                    var stdout = Command.Call(collectArgs.Prepend(Path.GetFullPath(exePath)), quiet);
                     writer.Write(stdout);
                 }
                 break;

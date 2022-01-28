@@ -4,8 +4,10 @@ namespace SubCommand;
 
 public static class Command
 {
-    public static string Call(string[] args, bool quiet = false)
+    public static string Call(IEnumerable<string> argsEnumerable, bool quiet = false)
     {
+        var args = argsEnumerable.ToArray();
+
         if (!quiet)
         {
             Console.WriteLine($"[CMD] {string.Join(' ', args)}");
