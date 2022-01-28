@@ -10,6 +10,8 @@ internal static class Parser
                 return Ops.Plus(tok);
             case "-":
                 return Ops.Minus(tok);
+            case "mod":
+                return Ops.Mod(tok);
             case "dump":
                 return Ops.Dump(tok);
             case "=":

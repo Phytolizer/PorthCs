@@ -17,6 +17,11 @@ internal static class Ops
         return new Op(OpCode.Minus, t);
     }
 
+    public static Op Mod(Token t)
+    {
+        return new Op(OpCode.Mod, t);
+    }
+
     public static Op Dump(Token t)
     {
         return new Op(OpCode.Dump, t);

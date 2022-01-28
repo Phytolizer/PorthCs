@@ -34,6 +34,14 @@ internal static class Simulator
                     ++ip;
                     break;
                 }
+                case OpCode.Mod:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push(a % b);
+                    ++ip;
+                    break;
+                }
                 case OpCode.Equal:
                 {
                     var b = (ulong)stack.Pop();

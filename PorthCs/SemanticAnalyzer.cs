@@ -71,6 +71,7 @@ internal static class SemanticAnalyzer
                 case OpCode.Push:
                 case OpCode.Plus:
                 case OpCode.Minus:
+                case OpCode.Mod:
                 case OpCode.Equal:
                 case OpCode.Lt:
                 case OpCode.Gt:
