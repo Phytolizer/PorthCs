@@ -59,7 +59,7 @@ internal static class Compiler
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(a % b);");
                     break;
-                case OpCode.Equal:
+                case OpCode.Eq:
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(if a == b { 1 } else { 0 });");

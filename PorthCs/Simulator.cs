@@ -42,7 +42,7 @@ internal static class Simulator
                     ++ip;
                     break;
                 }
-                case OpCode.Equal:
+                case OpCode.Eq:
                 {
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();

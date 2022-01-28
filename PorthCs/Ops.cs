@@ -27,9 +27,9 @@ internal static class Ops
         return new Op(OpCode.Dump, t);
     }
 
-    public static Op Equal(Token t)
+    public static Op Eq(Token t)
     {
-        return new Op(OpCode.Equal, t);
+        return new Op(OpCode.Eq, t);
     }
 
     public static Op Lt(Token t)

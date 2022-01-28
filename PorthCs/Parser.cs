@@ -15,7 +15,7 @@ internal static class Parser
             case "dump":
                 return Ops.Dump(tok);
             case "=":
-                return Ops.Equal(tok);
+                return Ops.Eq(tok);
             case "<":
                 return Ops.Lt(tok);
             case ">":

@@ -72,7 +72,7 @@ internal static class SemanticAnalyzer
                 case OpCode.Plus:
                 case OpCode.Minus:
                 case OpCode.Mod:
-                case OpCode.Equal:
+                case OpCode.Eq:
                 case OpCode.Lt:
                 case OpCode.Gt:
                 case OpCode.Shr:

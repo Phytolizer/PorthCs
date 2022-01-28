@@ -6,7 +6,7 @@ internal enum OpCode
     Plus,
     Minus,
     Mod,
-    Equal,
+    Eq,
     Lt,
     Gt,
     Shr,
