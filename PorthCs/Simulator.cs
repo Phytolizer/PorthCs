@@ -266,6 +266,7 @@ internal static class Simulator
                                     throw new UnknownFileDescriptorException(arg1);
                             }
 
+                            stack.Push(arg3);
                             break;
                         }
                         default:

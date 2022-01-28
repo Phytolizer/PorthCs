@@ -13,14 +13,14 @@ internal static class Compiler
             $@"
                 use std::io::Write;
 
-                fn do_syscall(mem: &mut [u8], number: u64, args: Vec<u64>) {{
+                fn do_syscall(mem: &mut [u8], number: u64, args: Vec<u64>) -> u64 {{
                     match number {{
                         1 => match args[0] {{
                             1 => {{
-                                std::io::stdout().write(&mem[args[1] as usize..args[2] as usize]).unwrap();
+                                return std::io::stdout().write(&mem[args[1] as usize..args[2] as usize]).unwrap() as u64;
                             }}
                             2 => {{
-                                std::io::stderr().write(&mem[args[1] as usize..args[2] as usize]).unwrap();
+                                return std::io::stderr().write(&mem[args[1] as usize..args[2] as usize]).unwrap() as u64;
                             }}
                             _ => panic!(""unknown file descriptor {{}}"", args[0]),
                         }}
@@ -176,20 +176,23 @@ internal static class Compiler
                 case OpCode.Syscall1:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
                     writer.WriteLine("let arg1 = stack.pop().unwrap();");
-                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1]);");
+                    writer.WriteLine("let result = do_syscall(&mut memory, syscall_number, vec![arg1]);");
+                    writer.WriteLine("stack.push(result);");
                     break;
                 case OpCode.Syscall2:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
                     writer.WriteLine("let arg1 = stack.pop().unwrap();");
                     writer.WriteLine("let arg2 = stack.pop().unwrap();");
-                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2]);");
+                    writer.WriteLine("let result = do_syscall(&mut memory, syscall_number, vec![arg1, arg2]);");
+                    writer.WriteLine("stack.push(result);");
                     break;
                 case OpCode.Syscall3:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
                     writer.WriteLine("let arg1 = stack.pop().unwrap();");
                     writer.WriteLine("let arg2 = stack.pop().unwrap();");
                     writer.WriteLine("let arg3 = stack.pop().unwrap();");
-                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3]);");
+                    writer.WriteLine("let result = do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3]);");
+                    writer.WriteLine("stack.push(result);");
                     break;
                 case OpCode.Syscall4:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
@@ -197,7 +200,8 @@ internal static class Compiler
                     writer.WriteLine("let arg2 = stack.pop().unwrap();");
                     writer.WriteLine("let arg3 = stack.pop().unwrap();");
                     writer.WriteLine("let arg4 = stack.pop().unwrap();");
-                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4]);");
+                    writer.WriteLine("let result = do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4]);");
+                    writer.WriteLine("stack.push(result);");
                     break;
                 case OpCode.Syscall5:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
@@ -206,7 +210,8 @@ internal static class Compiler
                     writer.WriteLine("let arg3 = stack.pop().unwrap();");
                     writer.WriteLine("let arg4 = stack.pop().unwrap();");
                     writer.WriteLine("let arg5 = stack.pop().unwrap();");
-                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4, arg5]);");
+                    writer.WriteLine("let result = do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4, arg5]);");
+                    writer.WriteLine("stack.push(result);");
                     break;
                 case OpCode.Syscall6:
                     writer.WriteLine("let syscall_number = stack.pop().unwrap();");
@@ -216,7 +221,8 @@ internal static class Compiler
                     writer.WriteLine("let arg4 = stack.pop().unwrap();");
                     writer.WriteLine("let arg5 = stack.pop().unwrap();");
                     writer.WriteLine("let arg6 = stack.pop().unwrap();");
-                    writer.WriteLine("do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4, arg5, arg6]);");
+                    writer.WriteLine("let result = do_syscall(&mut memory, syscall_number, vec![arg1, arg2, arg3, arg4, arg5, arg6]);");
+                    writer.WriteLine("stack.push(result);");
                     break;
                 case OpCode.Count:
                     throw new InvalidOperationException("unreachable");
