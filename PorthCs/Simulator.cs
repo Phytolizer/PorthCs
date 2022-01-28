@@ -50,6 +50,14 @@ internal static class Simulator
                     ++ip;
                     break;
                 }
+                case OpCode.Ne:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push((ulong)(a != b ? 1 : 0));
+                    ++ip;
+                    break;
+                }
                 case OpCode.Lt:
                 {
                     var b = (ulong)stack.Pop();
@@ -63,6 +71,22 @@ internal static class Simulator
                     var b = (ulong)stack.Pop();
                     var a = (ulong)stack.Pop();
                     stack.Push((ulong)(a > b ? 1 : 0));
+                    ++ip;
+                    break;
+                }
+                case OpCode.Le:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push((ulong)(a <= b ? 1 : 0));
+                    ++ip;
+                    break;
+                }
+                case OpCode.Ge:
+                {
+                    var b = (ulong)stack.Pop();
+                    var a = (ulong)stack.Pop();
+                    stack.Push((ulong)(a >= b ? 1 : 0));
                     ++ip;
                     break;
                 }

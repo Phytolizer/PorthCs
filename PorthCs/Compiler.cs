@@ -64,6 +64,11 @@ internal static class Compiler
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(if a == b { 1 } else { 0 });");
                     break;
+                case OpCode.Ne:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(if a != b { 1 } else { 0 });");
+                    break;
                 case OpCode.Lt:
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
@@ -73,6 +78,16 @@ internal static class Compiler
                     writer.WriteLine("let b = stack.pop().unwrap();");
                     writer.WriteLine("let a = stack.pop().unwrap();");
                     writer.WriteLine("stack.push(if a > b { 1 } else { 0 });");
+                    break;
+                case OpCode.Le:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(if a <= b { 1 } else { 0 });");
+                    break;
+                case OpCode.Ge:
+                    writer.WriteLine("let b = stack.pop().unwrap();");
+                    writer.WriteLine("let a = stack.pop().unwrap();");
+                    writer.WriteLine("stack.push(if a >= b { 1 } else { 0 });");
                     break;
                 case OpCode.Shr:
                     writer.WriteLine("let b = stack.pop().unwrap();");

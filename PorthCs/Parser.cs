@@ -16,10 +16,16 @@ internal static class Parser
                 return Ops.Dump(tok);
             case "=":
                 return Ops.Eq(tok);
+            case "!=":
+                return Ops.Ne(tok);
             case "<":
                 return Ops.Lt(tok);
             case ">":
                 return Ops.Gt(tok);
+            case "<=":
+                return Ops.Le(tok);
+            case ">=":
+                return Ops.Ge(tok);
             case "shr":
                 return Ops.Shr(tok);
             case "shl":

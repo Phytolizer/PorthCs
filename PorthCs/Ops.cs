@@ -32,6 +32,11 @@ internal static class Ops
         return new Op(OpCode.Eq, t);
     }
 
+    public static Op Ne(Token t)
+    {
+        return new Op(OpCode.Ne, t);
+    }
+
     public static Op Lt(Token t)
     {
         return new Op(OpCode.Lt, t);
@@ -40,6 +45,16 @@ internal static class Ops
     public static Op Gt(Token t)
     {
         return new Op(OpCode.Gt, t);
+    }
+
+    public static Op Le(Token t)
+    {
+        return new Op(OpCode.Le, t);
+    }
+
+    public static Op Ge(Token t)
+    {
+        return new Op(OpCode.Ge, t);
     }
 
     public static Op Shr(Token t)
