@@ -6,9 +6,13 @@ public static class Program
 {
     private static void Usage(TextWriter writer)
     {
-        writer.WriteLine($"Usage: {Environment.ProcessPath ?? "porth"} <SUBCOMMAND> [ARGS]");
+        writer.WriteLine($"Usage: {Environment.ProcessPath ?? "porth"} [OPTIONS] <SUBCOMMAND> [ARGS]");
+        writer.WriteLine("  OPTIONS:");
+        writer.WriteLine("    -q                    Disable non-essential output");
         writer.WriteLine("  SUBCOMMANDS:");
-        writer.WriteLine("    sim <file>            Simulate the program");
+        writer.WriteLine("    sim [OPTIONS] <file>            Simulate the program");
+        writer.WriteLine("      OPTIONS:");
+        writer.WriteLine("        -debug              Enable debug mode");
         writer.WriteLine("    com [OPTIONS] <file>  Compile the program");
         writer.WriteLine("      OPTIONS:");
         writer.WriteLine("        -r                  Run the program after successful compilation");
@@ -56,15 +60,35 @@ public static class Program
         {
             case "sim":
             {
-                if (!argsIter.MoveNext())
+                var debugMode = false;
+                string? programPath = null;
+                while (programPath == null && argsIter.MoveNext())
+                {
+                    var flag = argsIter.Current;
+                    switch (flag)
+                    {
+                        case "-debug":
+                            debugMode = true;
+                            break;
+                        default:
+                            programPath = flag;
+                            break;
+                    }
+                }
+
+                if (programPath == null)
                 {
                     Usage(writer);
                     throw new UsageException("no input file is provided for the simulation");
                 }
 
-                var programPath = argsIter.Current ?? throw new InvalidOperationException();
+                if (debugMode)
+                {
+                    Console.WriteLine("[INFO] Debug mode is enabled");
+                }
+
                 var program = LoadProgramFromFile(programPath);
-                Simulator.Simulate(program.ToList(), writer);
+                Simulator.Simulate(program.ToList(), writer, debugMode);
             }
             break;
             case "com":
@@ -74,7 +98,7 @@ public static class Program
                 string? outputPath = null;
                 while (programPath == null && argsIter.MoveNext())
                 {
-                    var flag = argsIter.Current ?? throw new InvalidOperationException();
+                    var flag = argsIter.Current;
                     switch (flag)
                     {
                         case "-r":
@@ -87,7 +111,7 @@ public static class Program
                                 throw new UsageException("no argument is provided for parameter '-o'");
                             }
 
-                            outputPath = argsIter.Current ?? throw new InvalidOperationException();
+                            outputPath = argsIter.Current;
                             break;
                         default:
                             programPath = flag;

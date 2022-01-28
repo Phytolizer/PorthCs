@@ -4,7 +4,7 @@ namespace PorthCs;
 
 internal static class Simulator
 {
-    public static void Simulate(IList<Op> program, TextWriter writer)
+    public static void Simulate(IList<Op> program, TextWriter writer, bool debugMode)
     {
         var stack = new Stack<object>();
         var mem = new char[Memory.Capacity];
@@ -221,5 +221,13 @@ internal static class Simulator
                     throw new ArgumentOutOfRangeException(nameof(program));
             }
         }
+
+        if (!debugMode)
+        {
+            return;
+        }
+
+        Console.WriteLine("[INFO] Memory dump");
+        Console.WriteLine(mem[..20]);
     }
 }
