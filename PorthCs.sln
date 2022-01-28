@@ -10,9 +10,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PorthTest", "PorthTest\PorthTest.csproj", "{E3E7B440-43AB-4791-8465-E1AD3CB122E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PorthTest", "PorthTest\PorthTest.csproj", "{E3E7B440-43AB-4791-8465-E1AD3CB122E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubCommand", "SubCommand\SubCommand.csproj", "{DFB397FB-AFD1-4618-969D-06B1470F0C7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubCommand", "SubCommand\SubCommand.csproj", "{DFB397FB-AFD1-4618-969D-06B1470F0C7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{600C39B8-B77C-4351-A663-F18AA3D7B837}"
+	ProjectSection(SolutionItems) = preProject
+		HelloWorld.porth = HelloWorld.porth
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +40,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{600C39B8-B77C-4351-A663-F18AA3D7B837} = {2567033F-A2AE-45FC-B98D-F546D29874FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {771038F6-E35C-4987-B4CF-A2E61366D487}
